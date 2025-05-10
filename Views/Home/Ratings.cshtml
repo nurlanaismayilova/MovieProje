@@ -1,12 +1,51 @@
 ﻿@model List<MovieProject.Models.Rating>
 
-<h2>Ratings</h2>
-<table class="table">
-    <thead><tr><th>Score</th><th>Review</th></tr></thead>
-    <tbody>
-        @foreach (var r in Model)
-        {
-            <tr><td>@r.Score</td><td>@r.Review</td></tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ratings</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin: 20px auto;
         }
-    </tbody>
-</table>
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Ratings</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Score</th>
+                <th>Review</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Score</td>
+                    <td>@r.Review</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
