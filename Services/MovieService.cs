@@ -126,9 +126,7 @@ namespace MovieProject.Services
                     list.Add(new MovieActor
                     {
                         MovieId = reader.GetInt32("movie_id"),
-                        MovieTitle = reader.GetString("movie_title"),
                         ActorId = reader.GetInt32("actor_id"),
-                        ActorName = reader.GetString("actor_name")
                     });
                 }
             }
