@@ -53,6 +53,23 @@
                 <th>Movie Title</th>
                 <th>Actor ID</th>
                 <th>Actor Name</th>
+
+              
+<h2>Movie - Actor Relationships</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Movie ID</th>
+            <th>Actor ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MovieId</td>
+                <td>@item.ActorId</td>
+
             </tr>
         </thead>
         <tbody>
