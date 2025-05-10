@@ -38,5 +38,11 @@ public class HomeController : Controller
         var genres = _movieService.GetAllGenres();
         return View(genres);
     }
+    public IActionResult MovieActors()
+    {
+        var data = _movieService.GetAllMovieActors();
+        return View(data);
+    }
+
 }
 
