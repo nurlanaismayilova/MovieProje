@@ -33,16 +33,16 @@
     <table>
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Name</th>
-                <th>Actor ID</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var a in Model)
             {
                 <tr>
+                    <td>@a.ActorId</td>
                     <td>@a.Name</td>
-                    <td>@a.Actor_id</td>
                 </tr>
             }
         </tbody>

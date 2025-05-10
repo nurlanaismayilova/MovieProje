@@ -12,7 +12,6 @@ namespace MovieProject.Services
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-
         public List<Movie> GetAllMovies()
         {
             var movies = new List<Movie>();
@@ -22,7 +21,7 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "SELECT title, release_year FROM movies";
+                string query = "SELECT movie_id, title, release_year FROM movies";
                 using var cmd = new MySqlCommand(query, conn);
                 using var reader = cmd.ExecuteReader();
 
@@ -30,6 +29,7 @@ namespace MovieProject.Services
                 {
                     movies.Add(new Movie
                     {
+                        MovieId = reader.GetInt32("movie_id"),
                         Title = reader.GetString("title"),
                         ReleaseYear = reader.GetInt32("release_year")
                     });
@@ -37,27 +37,37 @@ namespace MovieProject.Services
             }
             catch (Exception ex)
             {
-                // Optional: log the error, show alert, etc.
                 Console.WriteLine("Error fetching movies: " + ex.Message);
             }
 
             return movies;
         }
 
-
-
         public List<Actor> GetAllActors()
         {
             var list = new List<Actor>();
-            using var conn = new MySqlConnection(_connectionString);
-            conn.Open();
 
-            var cmd = new MySqlCommand("SELECT name FROM actors", conn);
-            var reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                list.Add(new Actor { Name = reader.GetString("name") });
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = "SELECT actor_id, name FROM actors";
+                using var cmd = new MySqlCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new Actor
+                    {
+                        ActorId = reader.GetInt32("actor_id"),
+                        Name = reader.GetString("name")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching actors: " + ex.Message);
             }
 
             return list;
@@ -66,19 +76,29 @@ namespace MovieProject.Services
         public List<Rating> GetAllRatings()
         {
             var list = new List<Rating>();
-            using var conn = new MySqlConnection(_connectionString);
-            conn.Open();
 
-            var cmd = new MySqlCommand("SELECT score, review FROM ratings", conn);
-            var reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                list.Add(new Rating
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = "SELECT rating_id, score, review FROM ratings";
+                using var cmd = new MySqlCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    Score = reader.GetDecimal("score"),
-                    Review = reader.GetString("review")
-                });
+                    list.Add(new Rating
+                    {
+                        RatingId = reader.GetInt32("rating_id"),
+                        Score = reader.GetDecimal("score"),
+                        Review = reader.GetString("review")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching ratings: " + ex.Message);
             }
 
             return list;
@@ -87,15 +107,28 @@ namespace MovieProject.Services
         public List<Genre> GetAllGenres()
         {
             var list = new List<Genre>();
-            using var conn = new MySqlConnection(_connectionString);
-            conn.Open();
 
-            var cmd = new MySqlCommand("SELECT name FROM genres", conn);
-            var reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                list.Add(new Genre { Name = reader.GetString("name") });
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = "SELECT genre_id, name FROM genres";
+                using var cmd = new MySqlCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new Genre
+                    {
+                        GenreId = reader.GetInt32("genre_id"),
+                        Name = reader.GetString("name")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching genres: " + ex.Message);
             }
 
             return list;

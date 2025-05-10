@@ -4,5 +4,6 @@
     {
         public decimal Score { get; set; }
         public string Review { get; set; }
+        public int RatingId { get; set; }
     }
 }

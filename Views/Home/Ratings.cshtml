@@ -33,6 +33,7 @@
     <table>
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Score</th>
                 <th>Review</th>
             </tr>
@@ -41,6 +42,7 @@
             @foreach (var r in Model)
             {
                 <tr>
+                    <td>@r.RatingId</td>
                     <td>@r.Score</td>
                     <td>@r.Review</td>
                 </tr>

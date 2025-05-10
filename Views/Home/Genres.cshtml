@@ -33,6 +33,7 @@
     <table>
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Name</th>
             </tr>
         </thead>
@@ -40,6 +41,7 @@
             @foreach (var g in Model)
             {
                 <tr>
+                    <td>@g.GenreId</td>
                     <td>@g.Name</td>
                 </tr>
             }

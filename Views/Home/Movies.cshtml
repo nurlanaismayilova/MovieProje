@@ -1,5 +1,4 @@
-﻿@model List<MovieProject.Models.Movie>
-
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +32,7 @@
     <table>
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Title</th>
                 <th>Release Year</th>
             </tr>
@@ -41,6 +41,7 @@
             @foreach (var m in Model)
             {
                 <tr>
+                    <td>@m.MovieId</td>
                     <td>@m.Title</td>
                     <td>@m.ReleaseYear</td>
                 </tr>
