@@ -1,22 +1,42 @@
 using Microsoft.AspNetCore.Mvc;
-using MovieProject.Models;
 using MovieProject.Services;
 
-namespace MovieProject.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly MovieService _movieService;
+
+    public HomeController(MovieService movieService)
     {
-        private readonly MovieService _movieService;
+        _movieService = movieService;
+    }
 
-        public HomeController(MovieService movieService)
-        {
-            _movieService = movieService;
-        }
+    public IActionResult Index()
+    {
+        return RedirectToAction("Movies");
+    }
 
-        public IActionResult Index()
-        {
-            List<Movie> movies = _movieService.GetAllMovies();
-            return View(movies);
-        }
+    public IActionResult Movies()
+    {
+        var movies = _movieService.GetAllMovies();
+        return View(movies);
+    }
+
+    public IActionResult Actors()
+    {
+        var actors = _movieService.GetAllActors();
+        return View(actors);
+    }
+
+    public IActionResult Ratings()
+    {
+        var ratings = _movieService.GetAllRatings();
+        return View(ratings);
+    }
+
+    public IActionResult Genres()
+    {
+        var genres = _movieService.GetAllGenres();
+        return View(genres);
     }
 }
+

@@ -1,33 +1,52 @@
 ﻿@using MovieProject.Models
-@model List<Movie>
+@model HomeViewModel
 
-@{
-    ViewData["Title"] = "Movie List";
-}
-
-<h2>@ViewData["Title"]</h2>
-
-@if (Model != null && Model.Count > 0)
-{
-    <table class="table table-bordered table-striped table-hover">
-        <thead>
+<h2>Movies</h2>
+<table class="table table-bordered">
+    <thead><tr><th>Title</th><th>Release Year</th></tr></thead>
+    <tbody>
+        @foreach (var movie in Model.Movies)
+        {
             <tr>
-                <th>Title</th>
-                <th>Release Year</th>
+                <td>@movie.Title</td>
+                <td>@movie.ReleaseYear</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var movie in Model)
-            {
-                <tr>
-                    <td>@movie.Title</td>
-                    <td>@movie.ReleaseYear</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No movies found.</p>
-}
+        }
+    </tbody>
+</table>
+
+<h2>Actors</h2>
+<table class="table table-bordered">
+    <thead><tr><th>Name</th></tr></thead>
+    <tbody>
+        @foreach (var actor in Model.Actors)
+        {
+            <tr><td>@actor.Name</td></tr>
+        }
+    </tbody>
+</table>
+
+<h2>Ratings</h2>
+<table class="table table-bordered">
+    <thead><tr><th>Score</th><th>Review</th></tr></thead>
+    <tbody>
+        @foreach (var rating in Model.Ratings)
+        {
+            <tr>
+                <td>@rating.Score</td>
+                <td>@rating.Review</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Genres</h2>
+<table class="table table-bordered">
+    <thead><tr><th>Name</th></tr></thead>
+    <tbody>
+        @foreach (var genre in Model.Genres)
+        {
+            <tr><td>@genre.Name</td></tr>
+        }
+    </tbody>
+</table>

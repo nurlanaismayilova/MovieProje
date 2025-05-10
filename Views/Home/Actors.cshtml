@@ -1,0 +1,12 @@
+﻿@model List<MovieProject.Models.Actor>
+
+<h2>Actors</h2>
+<table class="table">
+    <thead><tr><th>Name</th></tr></thead>
+    <tbody>
+        @foreach (var a in Model)
+        {
+            <tr><td>@a.Name</td></tr>
+        }
+    </tbody>
+</table>

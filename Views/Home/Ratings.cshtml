@@ -1,0 +1,12 @@
+﻿@model List<MovieProject.Models.Rating>
+
+<h2>Ratings</h2>
+<table class="table">
+    <thead><tr><th>Score</th><th>Review</th></tr></thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr><td>@r.Score</td><td>@r.Review</td></tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,12 @@
+﻿@model List<MovieProject.Models.Genre>
+
+<h2>Genres</h2>
+<table class="table">
+    <thead><tr><th>Name</th></tr></thead>
+    <tbody>
+        @foreach (var g in Model)
+        {
+            <tr><td>@g.Name</td></tr>
+        }
+    </tbody>
+</table>
