@@ -21,7 +21,7 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "SELECT movie_id, title, release_year FROM movies";
+                string query = "SELECT movie_id, title, release_year, genre_id FROM movies";
                 using var cmd = new MySqlCommand(query, conn);
                 using var reader = cmd.ExecuteReader();
 
@@ -31,7 +31,8 @@ namespace MovieProject.Services
                     {
                         MovieId = reader.GetInt32("movie_id"),
                         Title = reader.GetString("title"),
-                        ReleaseYear = reader.GetInt32("release_year")
+                        ReleaseYear = reader.GetInt32("release_year"),
+                        GenreId = reader.GetInt32("genre_id")
                     });
                 }
             }
@@ -52,9 +53,8 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "SELECT actor_id, name FROM actors";
-                using var cmd = new MySqlCommand(query, conn);
-                using var reader = cmd.ExecuteReader();
+                var cmd = new MySqlCommand("SELECT actor_id, name FROM actors", conn);
+                var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -82,7 +82,7 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "SELECT rating_id, score, review FROM ratings";
+                string query = "SELECT rating_id, score, review, movie_id FROM ratings";
                 using var cmd = new MySqlCommand(query, conn);
                 using var reader = cmd.ExecuteReader();
 
@@ -92,7 +92,8 @@ namespace MovieProject.Services
                     {
                         RatingId = reader.GetInt32("rating_id"),
                         Score = reader.GetDecimal("score"),
-                        Review = reader.GetString("review")
+                        Review = reader.GetString("review"),
+                        MovieId = reader.GetInt32("movie_id")
                     });
                 }
             }
@@ -113,9 +114,8 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "SELECT genre_id, name FROM genres";
-                using var cmd = new MySqlCommand(query, conn);
-                using var reader = cmd.ExecuteReader();
+                var cmd = new MySqlCommand("SELECT genre_id, name FROM genres", conn);
+                var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
