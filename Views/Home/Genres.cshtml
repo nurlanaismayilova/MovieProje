@@ -1,12 +1,49 @@
 ﻿@model List<MovieProject.Models.Genre>
 
-<h2>Genres</h2>
-<table class="table">
-    <thead><tr><th>Name</th></tr></thead>
-    <tbody>
-        @foreach (var g in Model)
-        {
-            <tr><td>@g.Name</td></tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genres</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin: 20px auto;
         }
-    </tbody>
-</table>
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Genres</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model)
+            {
+                <tr>
+                    <td>@g.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

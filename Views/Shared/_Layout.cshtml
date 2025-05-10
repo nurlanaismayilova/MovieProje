@@ -4,31 +4,80 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - MovieApp</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: white;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1em;
+        }
+
+        .nav-links li a:hover {
+            text-decoration: underline;
+        }
+
+        .page-content {
+            padding-top: 80px; /* Avoid content hidden behind navbar */
+            width: 90%;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav>
         <div class="container">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MovieApp</a>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Movies">Movies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Actors">Actors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Ratings">Ratings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Genres">Genres</a>
-                    </li>
-                </ul>
-            </div>
+            <ul class="nav-links">
+                <li><a asp-controller="Home" asp-action="Movies">Movies</a></li>
+                <li><a asp-controller="Home" asp-action="Actors">Actors</a></li>
+                <li><a asp-controller="Home" asp-action="Ratings">Ratings</a></li>
+                <li><a asp-controller="Home" asp-action="Genres">Genres</a></li>
+            </ul>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="page-content">
         @RenderBody()
     </div>
 </body>

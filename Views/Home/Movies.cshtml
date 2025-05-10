@@ -1,12 +1,51 @@
 ﻿@model List<MovieProject.Models.Movie>
 
-<h2>Movies</h2>
-<table class="table">
-    <thead><tr><th>Title</th><th>Release Year</th></tr></thead>
-    <tbody>
-        @foreach (var m in Model)
-        {
-            <tr><td>@m.Title</td><td>@m.ReleaseYear</td></tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin: 20px auto;
         }
-    </tbody>
-</table>
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Movies</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Release Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.Title</td>
+                    <td>@m.ReleaseYear</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
