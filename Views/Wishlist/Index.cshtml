@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MovieProject.Models.Wishlist> 
+
+<h2>Wishlist</h2>
+
+<a href="@Url.Action("Create", "Wishlist")" class="btn btn-primary">Add to Wishlist</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Movie ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var wishlist in Model)
+        {
+            <tr>
+                <td>@wishlist.UserName</td>
+                <td>@wishlist.MovieId</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Wishlist", new { id = wishlist.WishlistId })" class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", "Wishlist", new { id = wishlist.WishlistId })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
