@@ -47,6 +47,13 @@
 </head>
 <body>
     <h2>Movie - Actor Relationships</h2>
+    <form asp-action="Search" method="get" class="form-inline mb-3">
+        <div class="form-group">
+            <input type="text" name="query" class="form-control" placeholder="Search movies, actors, genres..." />
+        </div>
+        <button type="submit" class="btn btn-outline-primary ml-2">Search</button>
+    </form>
+
     <table>
         <thead>
             <tr>

@@ -5,7 +5,14 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="AddWishlist" method="post">
+<!-- ✅ Search Bar -->
+<form asp-action="Index" method="get" class="form-inline mb-4">
+    <input type="text" name="searchString" class="form-control mr-2" placeholder="Search by username or movie ID..." />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<!-- ✅ Add Wishlist Form -->
+<form asp-action="AddWishlist" method="post" class="mb-4">
     <div class="form-group">
         <label>Username</label>
         <input type="text" name="UserName" class="form-control" required />
@@ -14,15 +21,15 @@
         <label>Movie ID</label>
         <input type="number" name="MovieId" class="form-control" required />
     </div>
-    <button type="submit" class="btn btn-primary">Add to Wishlist</button>
+    <button type="submit" class="btn btn-success">Add to Wishlist</button>
 </form>
 
 <hr />
 
 @if (Model != null && Model.Any())
 {
-    <table class="table">
-        <thead>
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
                 <th>ID</th>
                 <th>User</th>

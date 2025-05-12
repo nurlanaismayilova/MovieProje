@@ -58,7 +58,6 @@ namespace MovieProject.Services
         }
 
 
-        // Get a wishlist item by its ID
         public Wishlist GetWishlistById(int id)
         {
             Wishlist wishlist = null;
@@ -103,13 +102,11 @@ namespace MovieProject.Services
                 cmd.Parameters.AddWithValue("@movieId", wishlist.MovieId);
                 cmd.Parameters.AddWithValue("@id", wishlist.WishlistId);
 
-                // Log the query and parameters for debugging
                 Console.WriteLine($"Executing query: {query}");
                 Console.WriteLine($"@userName = {wishlist.UserName}, @movieId = {wishlist.MovieId}, @id = {wishlist.WishlistId}");
 
-                int affectedRows = cmd.ExecuteNonQuery();  // Execute the update
+                int affectedRows = cmd.ExecuteNonQuery();
 
-                // Log the result of ExecuteNonQuery to verify it affected rows
                 Console.WriteLine($"Rows affected: {affectedRows}");
 
                 if (affectedRows > 0)
@@ -170,7 +167,6 @@ namespace MovieProject.Services
             return movies;
         }
 
-        // Fetch all actors from the database
         public List<Actor> GetAllActors()
         {
             var actors = new List<Actor>();
@@ -192,7 +188,6 @@ namespace MovieProject.Services
             return actors;
         }
 
-        // Fetch all genres from the database
         public List<Genre> GetAllGenres()
         {
             var genres = new List<Genre>();
@@ -214,7 +209,6 @@ namespace MovieProject.Services
             return genres;
         }
 
-        // Fetch all ratings from the database
         public List<Rating> GetAllRatings()
         {
             var ratings = new List<Rating>();
@@ -238,7 +232,6 @@ namespace MovieProject.Services
             return ratings;
         }
 
-        // Fetch all movie-actor relationships from the database
         public List<MovieActor> GetAllMovieActors()
         {
             var movieActors = new List<MovieActor>();
@@ -261,5 +254,60 @@ namespace MovieProject.Services
 
             return movieActors;
         }
+
+        public List<SearchResult> Search(string query)
+        {
+            var results = new List<SearchResult>();
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            var movieCmd = new MySqlCommand("SELECT title, release_year FROM movies WHERE title LIKE @q", conn);
+            movieCmd.Parameters.AddWithValue("@q", $"%{query}%");
+            using (var reader = movieCmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    results.Add(new SearchResult
+                    {
+                        Type = "Movie",
+                        Name = reader.GetString("title"),
+                        Details = $"Year: {reader.GetInt32("release_year")}"
+                    });
+                }
+            }
+
+            var actorCmd = new MySqlCommand("SELECT name FROM actors WHERE name LIKE @q", conn);
+            actorCmd.Parameters.AddWithValue("@q", $"%{query}%");
+            using (var reader = actorCmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    results.Add(new SearchResult
+                    {
+                        Type = "Actor",
+                        Name = reader.GetString("name"),
+                        Details = ""
+                    });
+                }
+            }
+
+            var genreCmd = new MySqlCommand("SELECT name FROM genres WHERE name LIKE @q", conn);
+            genreCmd.Parameters.AddWithValue("@q", $"%{query}%");
+            using (var reader = genreCmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    results.Add(new SearchResult
+                    {
+                        Type = "Genre",
+                        Name = reader.GetString("name"),
+                        Details = ""
+                    });
+                }
+            }
+
+            return results;
+        }
+
     }
 }

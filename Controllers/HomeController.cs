@@ -56,6 +56,12 @@ public class HomeController : Controller
         return View("Wishlist", _movieService.GetAllWishlist());
     }
 
+    public IActionResult Search(string query)
+    {
+        var results = _movieService.Search(query);
+        return View("SearchResults", results);
+    }
+
 
 
 }

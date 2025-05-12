@@ -6,7 +6,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<!-- Add to Wishlist Form -->
 <form asp-action="AddWishlist" method="post" class="mb-4">
     <div class="form-group">
         <label for="UserName">Username</label>
@@ -24,6 +23,7 @@
 <hr />
 
 <h3>Wishlist Items</h3>
+
 
 @if (Model != null && Model.Any())
 {

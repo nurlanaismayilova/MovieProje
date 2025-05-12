@@ -37,28 +37,26 @@ namespace MovieProject.Controllers
             return View("Index", wishlistItems);
         }
 
-        // GET: Wishlist/Edit/{id}
         public IActionResult Edit(int id)
         {
             var item = _movieService.GetWishlistById(id);
             if (item == null)
             {
-                return NotFound();  // Return 404 if item not found
+                return NotFound();
             }
-            return View(item);  // Show the edit form
+            return View(item);
         }
 
-        // POST: Wishlist/Edit/{id}
         [HttpPost]
         public IActionResult Edit(Wishlist wishlist)
         {
             if (ModelState.IsValid)
             {
-                _movieService.UpdateWishlist(wishlist);  // Update the wishlist in the database
-                return RedirectToAction("Index");  // Redirect to the index page to show the updated list
+                _movieService.UpdateWishlist(wishlist);
+                return RedirectToAction("Index");
             }
 
-            return View(wishlist);  // If the model is invalid, return to the edit view with the current data
+            return View(wishlist);
         }
 
 
