@@ -2,9 +2,30 @@
 
 @{
     ViewData["Title"] = "Search Results";
+
+    // Get the source page name passed from the controller (default to Index)
+    var entity = ViewBag.Entity as string ?? "Index";
+
+    // Build the back URL based on entity
+    string backAction = entity.ToLower() switch
+    {
+        "movies" => "Movies",
+        "actors" => "Actors",
+        "ratings" => "Ratings",
+        "genres" => "Genres",
+        "movieactors" => "MovieActors",
+        _ => "Index"
+    };
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="text-center">@ViewData["Title"]</h2>
+
+<!-- Search bar form centered -->
+<form method="get" asp-action="Search" class="d-flex justify-content-center mb-3">
+    <input type="text" name="query" class="form-control w-50" placeholder="Search..." />
+    <input type="hidden" name="entity" value="@entity" /> <!-- keep entity to allow searching again -->
+    <button type="submit" class="btn btn-primary ms-2">Search</button>
+</form>
 
 @if (!Model.Any())
 {
@@ -33,4 +54,5 @@ else
     </table>
 }
 
-<a asp-action="Index" class="btn btn-secondary">Back to Wishlist</a>
+<!-- Back button with dynamic action -->
+<a asp-action="@backAction" class="btn btn-secondary">Back to Page</a>

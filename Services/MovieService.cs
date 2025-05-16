@@ -255,59 +255,137 @@ namespace MovieProject.Services
             return movieActors;
         }
 
-        public List<SearchResult> Search(string query)
+        public List<Movie> SearchMovies(string query)
         {
-            var results = new List<SearchResult>();
+            var movies = new List<Movie>();
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
 
-            var movieCmd = new MySqlCommand("SELECT title, release_year FROM movies WHERE title LIKE @q", conn);
-            movieCmd.Parameters.AddWithValue("@q", $"%{query}%");
-            using (var reader = movieCmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    results.Add(new SearchResult
-                    {
-                        Type = "Movie",
-                        Name = reader.GetString("title"),
-                        Details = $"Year: {reader.GetInt32("release_year")}"
-                    });
-                }
-            }
+            string sql = @"SELECT movie_id, title, release_year, genre_id FROM movies 
+                   WHERE movie_id LIKE @q 
+                      OR title LIKE @q 
+                      OR release_year LIKE @q 
+                      OR genre_id LIKE @q";
 
-            var actorCmd = new MySqlCommand("SELECT name FROM actors WHERE name LIKE @q", conn);
-            actorCmd.Parameters.AddWithValue("@q", $"%{query}%");
-            using (var reader = actorCmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    results.Add(new SearchResult
-                    {
-                        Type = "Actor",
-                        Name = reader.GetString("name"),
-                        Details = ""
-                    });
-                }
-            }
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@q", $"%{query}%");
 
-            var genreCmd = new MySqlCommand("SELECT name FROM genres WHERE name LIKE @q", conn);
-            genreCmd.Parameters.AddWithValue("@q", $"%{query}%");
-            using (var reader = genreCmd.ExecuteReader())
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                while (reader.Read())
+                movies.Add(new Movie
                 {
-                    results.Add(new SearchResult
-                    {
-                        Type = "Genre",
-                        Name = reader.GetString("name"),
-                        Details = ""
-                    });
-                }
+                    MovieId = reader.GetInt32("movie_id"),
+                    Title = reader.GetString("title"),
+                    ReleaseYear = reader.GetInt32("release_year"),
+                    GenreId = reader.GetInt32("genre_id")
+                });
             }
-
-            return results;
+            return movies;
         }
 
+        public List<Actor> SearchActors(string query)
+        {
+            var actors = new List<Actor>();
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            string sql = @"SELECT actor_id, name FROM actors 
+                   WHERE actor_id LIKE @q 
+                      OR name LIKE @q";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@q", $"%{query}%");
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                actors.Add(new Actor
+                {
+                    ActorId = reader.GetInt32("actor_id"),
+                    Name = reader.GetString("name")
+                });
+            }
+            return actors;
+        }
+
+        public List<Genre> SearchGenres(string query)
+        {
+            var genres = new List<Genre>();
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            string sql = @"SELECT genre_id, name FROM genres 
+                   WHERE genre_id LIKE @q 
+                      OR name LIKE @q";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@q", $"%{query}%");
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                genres.Add(new Genre
+                {
+                    GenreId = reader.GetInt32("genre_id"),
+                    Name = reader.GetString("name")
+                });
+            }
+            return genres;
+        }
+
+        public List<Rating> SearchRatings(string query)
+        {
+            var ratings = new List<Rating>();
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            string sql = @"SELECT rating_id, movie_id, score, review FROM ratings 
+                   WHERE rating_id LIKE @q 
+                      OR movie_id LIKE @q 
+                      OR score LIKE @q 
+                      OR review LIKE @q";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@q", $"%{query}%");
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ratings.Add(new Rating
+                {
+                    RatingId = reader.GetInt32("rating_id"),
+                    MovieId = reader.GetInt32("movie_id"),
+                    Score = reader.GetDecimal("score"),
+                    Review = reader.GetString("review")
+                });
+            }
+            return ratings;
+        }
+
+        public List<MovieActor> SearchMovieActors(string query)
+        {
+            var movieActors = new List<MovieActor>();
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            string sql = @"SELECT movie_id, actor_id FROM movie_actors 
+                   WHERE movie_id LIKE @q 
+                      OR actor_id LIKE @q";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@q", $"%{query}%");
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                movieActors.Add(new MovieActor
+                {
+                    MovieId = reader.GetInt32("movie_id"),
+                    ActorId = reader.GetInt32("actor_id")
+                });
+            }
+            return movieActors;
+        }
     }
 }
