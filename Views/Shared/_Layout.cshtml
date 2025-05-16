@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,12 +13,12 @@
     <style>
         body {
             margin: 0;
-            background-color: #EBE3D5;
+            background-color: #FDFAF6;
             font-family: 'Segoe UI', sans-serif;
         }
 
         nav {
-            background-color: #776B5D;
+            background-color: #99BC85;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -60,14 +63,16 @@
     <nav>
         <a class="navbar-brand" href="/">MovieApp</a>
         <ul class="nav-links">
-            <li><a href="/Home/Movies">Movies</a></li>
-            <li><a href="/Home/Actors">Actors</a></li>
-            <li><a href="/Home/Ratings">Ratings</a></li>
-            <li><a href="/Home/Genres">Genres</a></li>
-            <li><a href="/Home/MovieActors">Movie-Actors</a></li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Wishlist" asp-action="Index">Wishlist</a>
-            </li>
+            @if (HttpContextAccessor.HttpContext.Session.GetString("Username") != null)
+            {
+                <li><a href="/Home/Movies">Movies</a></li>
+                <li><a href="/Home/Actors">Actors</a></li>
+                <li><a href="/Home/Ratings">Ratings</a></li>
+                <li><a href="/Home/Genres">Genres</a></li>
+                <li><a href="/Home/MovieActors">Movie-Actors</a></li>
+                <li><a href="/Wishlist">Wishlist</a></li>
+                <li><a href="/Account/Logout">Logout</a></li>
+            }
         </ul>
     </nav>
 
