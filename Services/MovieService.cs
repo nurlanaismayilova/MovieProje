@@ -1,5 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
 using MovieProject.Models;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace MovieProject.Services
 {
@@ -12,6 +15,134 @@ namespace MovieProject.Services
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
+        public List<Wishlist> GetAllWishlist()
+        {
+            var wishlist = new List<Wishlist>();
+            try
+            {
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = "SELECT wishlist_id, user_name, movie_id FROM wishlist";
+                using var cmd = new MySqlCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    wishlist.Add(new Wishlist
+                    {
+                        WishlistId = reader.GetInt32("wishlist_id"),
+                        UserName = reader.GetString("user_name"),
+                        MovieId = reader.GetInt32("movie_id")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching wishlist: " + ex.Message);
+            }
+
+            return wishlist;
+        }
+        public void AddWishlist(Wishlist wishlist)
+        {
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            string query = "INSERT INTO wishlist (user_name, movie_id) VALUES (@userName, @movieId)";
+            using var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@userName", wishlist.UserName);
+            cmd.Parameters.AddWithValue("@movieId", wishlist.MovieId);
+
+            cmd.ExecuteNonQuery();
+        }
+
+
+        public Wishlist GetWishlistById(int id)
+        {
+            Wishlist wishlist = null;
+            try
+            {
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = "SELECT wishlist_id, user_name, movie_id FROM wishlist WHERE wishlist_id = @id";
+                using var cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    wishlist = new Wishlist
+                    {
+                        WishlistId = reader.GetInt32("wishlist_id"),
+                        UserName = reader.GetString("user_name"),
+                        MovieId = reader.GetInt32("movie_id")
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error fetching wishlist by ID: " + ex.Message);
+            }
+
+            return wishlist;
+        }
+
+        public void UpdateWishlist(Wishlist wishlist)
+        {
+            try
+            {
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = "UPDATE wishlist SET user_name = @userName, movie_id = @movieId WHERE wishlist_id = @id";
+                using var cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@userName", wishlist.UserName);
+                cmd.Parameters.AddWithValue("@movieId", wishlist.MovieId);
+                cmd.Parameters.AddWithValue("@id", wishlist.WishlistId);
+
+                Console.WriteLine($"Executing query: {query}");
+                Console.WriteLine($"@userName = {wishlist.UserName}, @movieId = {wishlist.MovieId}, @id = {wishlist.WishlistId}");
+
+                int affectedRows = cmd.ExecuteNonQuery();
+
+                Console.WriteLine($"Rows affected: {affectedRows}");
+
+                if (affectedRows > 0)
+                {
+                    Console.WriteLine("Wishlist updated successfully!");
+                }
+                else
+                {
+                    Console.WriteLine("No rows affected. Possible issue with the query or data.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating wishlist: " + ex.Message);
+            }
+        }
+
+
+        public void DeleteWishlist(int id)
+        {
+            try
+            {
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = "DELETE FROM wishlist WHERE wishlist_id = @id";
+                using var cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error deleting wishlist: " + ex.Message);
+            }
+        }
         public List<Movie> GetAllMovies()
         {
             var movies = new List<Movie>();
@@ -38,7 +169,7 @@ namespace MovieProject.Services
 
         public List<Actor> GetAllActors()
         {
-            var list = new List<Actor>();
+            var actors = new List<Actor>();
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
 
@@ -47,42 +178,19 @@ namespace MovieProject.Services
 
             while (reader.Read())
             {
-                list.Add(new Actor
+                actors.Add(new Actor
                 {
                     ActorId = reader.GetInt32("actor_id"),
                     Name = reader.GetString("name")
                 });
             }
 
-            return list;
-        }
-
-        public List<Rating> GetAllRatings()
-        {
-            var list = new List<Rating>();
-            using var conn = new MySqlConnection(_connectionString);
-            conn.Open();
-
-            var cmd = new MySqlCommand("SELECT rating_id, movie_id, score, review FROM ratings", conn);
-            var reader = cmd.ExecuteReader();
-
-            while (reader.Read())
-            {
-                list.Add(new Rating
-                {
-                    RatingId = reader.GetInt32("rating_id"),
-                    MovieId = reader.GetInt32("movie_id"),
-                    Score = reader.GetDecimal("score"),
-                    Review = reader.GetString("review")
-                });
-            }
-
-            return list;
+            return actors;
         }
 
         public List<Genre> GetAllGenres()
         {
-            var list = new List<Genre>();
+            var genres = new List<Genre>();
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
 
@@ -91,53 +199,115 @@ namespace MovieProject.Services
 
             while (reader.Read())
             {
-                list.Add(new Genre
+                genres.Add(new Genre
                 {
                     GenreId = reader.GetInt32("genre_id"),
                     Name = reader.GetString("name")
                 });
             }
 
-            return list;
+            return genres;
+        }
+
+        public List<Rating> GetAllRatings()
+        {
+            var ratings = new List<Rating>();
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            var cmd = new MySqlCommand("SELECT rating_id, movie_id, score, review FROM ratings", conn);
+            var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                ratings.Add(new Rating
+                {
+                    RatingId = reader.GetInt32("rating_id"),
+                    MovieId = reader.GetInt32("movie_id"),
+                    Score = reader.GetDecimal("score"),
+                    Review = reader.GetString("review")
+                });
+            }
+
+            return ratings;
         }
 
         public List<MovieActor> GetAllMovieActors()
         {
-            var list = new List<MovieActor>();
+            var movieActors = new List<MovieActor>();
 
-            try
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            string query = "SELECT movie_id, actor_id FROM movie_actors";
+            using var cmd = new MySqlCommand(query, conn);
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
             {
-                using var conn = new MySqlConnection(_connectionString);
-                conn.Open();
+                movieActors.Add(new MovieActor
+                {
+                    MovieId = reader.GetInt32("movie_id"),
+                    ActorId = reader.GetInt32("actor_id")
+                });
+            }
 
-                string query = @"
-                    SELECT 
-                        ma.movie_id, m.title AS movie_title,
-                        ma.actor_id, a.name AS actor_name
-                    FROM movie_actors ma
-                    JOIN movies m ON ma.movie_id = m.movie_id
-                    JOIN actors a ON ma.actor_id = a.actor_id";
+            return movieActors;
+        }
 
-                using var cmd = new MySqlCommand(query, conn);
-                using var reader = cmd.ExecuteReader();
+        public List<SearchResult> Search(string query)
+        {
+            var results = new List<SearchResult>();
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
 
+            var movieCmd = new MySqlCommand("SELECT title, release_year FROM movies WHERE title LIKE @q", conn);
+            movieCmd.Parameters.AddWithValue("@q", $"%{query}%");
+            using (var reader = movieCmd.ExecuteReader())
+            {
                 while (reader.Read())
                 {
-                    list.Add(new MovieActor
+                    results.Add(new SearchResult
                     {
-                        MovieId = reader.GetInt32("movie_id"),
-                        MovieTitle = reader.GetString("movie_title"),
-                        ActorId = reader.GetInt32("actor_id"),
-                        ActorName = reader.GetString("actor_name")
+                        Type = "Movie",
+                        Name = reader.GetString("title"),
+                        Details = $"Year: {reader.GetInt32("release_year")}"
                     });
                 }
             }
-            catch (Exception ex)
+
+            var actorCmd = new MySqlCommand("SELECT name FROM actors WHERE name LIKE @q", conn);
+            actorCmd.Parameters.AddWithValue("@q", $"%{query}%");
+            using (var reader = actorCmd.ExecuteReader())
             {
-                Console.WriteLine("Error fetching movie-actors: " + ex.Message);
+                while (reader.Read())
+                {
+                    results.Add(new SearchResult
+                    {
+                        Type = "Actor",
+                        Name = reader.GetString("name"),
+                        Details = ""
+                    });
+                }
             }
 
-            return list;
+            var genreCmd = new MySqlCommand("SELECT name FROM genres WHERE name LIKE @q", conn);
+            genreCmd.Parameters.AddWithValue("@q", $"%{query}%");
+            using (var reader = genreCmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    results.Add(new SearchResult
+                    {
+                        Type = "Genre",
+                        Name = reader.GetString("name"),
+                        Details = ""
+                    });
+                }
+            }
+
+            return results;
         }
+
     }
 }

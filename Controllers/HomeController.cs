@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MovieProject.Models;
 using MovieProject.Services;
 
 public class HomeController : Controller
@@ -43,6 +44,25 @@ public class HomeController : Controller
         var data = _movieService.GetAllMovieActors();
         return View(data);
     }
+
+    [HttpPost]
+    public IActionResult AddWishlist(Wishlist wishlist)
+    {
+        if (ModelState.IsValid)
+        {
+            _movieService.AddWishlist(wishlist);
+            return RedirectToAction("Wishlist");
+        }
+        return View("Wishlist", _movieService.GetAllWishlist());
+    }
+
+    public IActionResult Search(string query)
+    {
+        var results = _movieService.Search(query);
+        return View("SearchResults", results);
+    }
+
+
 
 }
 
