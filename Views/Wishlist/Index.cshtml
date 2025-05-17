@@ -1,29 +1,47 @@
-﻿@model IEnumerable<MovieProject.Models.Wishlist> 
+﻿@model IEnumerable<MovieProject.Models.Wishlist>
 
-<h2>Wishlist</h2>
+@{
+    ViewData["Title"] = "Wishlist";
+}
 
-<a href="@Url.Action("Create", "Wishlist")" class="btn btn-primary">Add to Wishlist</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Movie ID</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var wishlist in Model)
-        {
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Index" method="get" class="form-inline mb-4">
+    <input type="text" name="searchString" class="form-control mr-2" placeholder="Search by username or movie ID..." />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<a href="@Url.Action("Create", "Wishlist")" class="btn btn-success mb-4">Add to Wishlist</a>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
-                <td>@wishlist.UserName</td>
-                <td>@wishlist.MovieId</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Wishlist", new { id = wishlist.WishlistId })" class="btn btn-warning">Edit</a>
-                </td>
-                <td>
-                    <a href="@Url.Action("Delete", "Wishlist", new { id = wishlist.WishlistId })" class="btn btn-danger">Delete</a>
-                </td>
+                <th>#</th>
+                <th>Username</th>
+                <th>Movie ID</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var wishlist in Model)
+            {
+                <tr>
+                    <td>@wishlist.WishlistId</td>
+                    <td>@wishlist.UserName</td>
+                    <td>@wishlist.MovieId</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Wishlist", new { id = wishlist.WishlistId })" class="btn btn-info btn-sm mr-2">Edit</a>
+                        <a href="@Url.Action("Delete", "Wishlist", new { id = wishlist.WishlistId })" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No wishlist items found.</p>
+}

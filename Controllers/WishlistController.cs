@@ -21,8 +21,10 @@ namespace MovieProject.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var wishlist = new Wishlist();
+            return View(wishlist);
         }
+
 
         [HttpPost]
         public IActionResult AddWishlist(Wishlist wishlist)

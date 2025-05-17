@@ -1,5 +1,4 @@
-﻿// Controllers/AccountController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MovieProject.Models;
 using MovieProject.Services;
 using Microsoft.AspNetCore.Http;

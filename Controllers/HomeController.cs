@@ -11,7 +11,6 @@ public class HomeController : Controller
         _movieService = movieService;
     }
 
-    // In HomeController.cs
     public IActionResult Index()
     {
         if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
