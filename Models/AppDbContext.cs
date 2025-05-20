@@ -1,5 +1,4 @@
-﻿// Models/AppDbContext.cs
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace MovieProject.Models
 {
@@ -8,6 +7,6 @@ namespace MovieProject.Models
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Movie> Movies { get; set; } // and other entities
+        public DbSet<Movie> Movies { get; set; } 
     }
 }

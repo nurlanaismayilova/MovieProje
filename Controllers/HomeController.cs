@@ -65,7 +65,6 @@ public class HomeController : Controller
         if (string.IsNullOrWhiteSpace(entity))
             return RedirectToAction("Movies");
 
-        // If query is empty, redirect back to the original list page for that entity
         if (string.IsNullOrWhiteSpace(query))
         {
             switch (entity.ToLower())
