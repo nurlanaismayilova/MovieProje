@@ -23,7 +23,7 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "SELECT wishlist_id, user_name, movie_id FROM wishlist";
+                string query = "SELECT wishlist_id, movie_name, movie_id FROM wishlist";
                 using var cmd = new MySqlCommand(query, conn);
                 using var reader = cmd.ExecuteReader();
 
@@ -32,7 +32,7 @@ namespace MovieProject.Services
                     wishlist.Add(new Wishlist
                     {
                         WishlistId = reader.GetInt32("wishlist_id"),
-                        UserName = reader.GetString("user_name"),
+                        UserName = reader.GetString("movie_name"),
                         MovieId = reader.GetInt32("movie_id")
                     });
                 }
@@ -49,7 +49,7 @@ namespace MovieProject.Services
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
 
-            string query = "INSERT INTO wishlist (user_name, movie_id) VALUES (@userName, @movieId)";
+            string query = "INSERT INTO wishlist (movie_name, movie_id) VALUES (@userName, @movieId)";
             using var cmd = new MySqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@userName", wishlist.UserName);
             cmd.Parameters.AddWithValue("@movieId", wishlist.MovieId);
@@ -66,7 +66,7 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "SELECT wishlist_id, user_name, movie_id FROM wishlist WHERE wishlist_id = @id";
+                string query = "SELECT wishlist_id, movie_name, movie_id FROM wishlist WHERE wishlist_id = @id";
                 using var cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@id", id);
 
@@ -76,7 +76,7 @@ namespace MovieProject.Services
                     wishlist = new Wishlist
                     {
                         WishlistId = reader.GetInt32("wishlist_id"),
-                        UserName = reader.GetString("user_name"),
+                        UserName = reader.GetString("movie_name"),
                         MovieId = reader.GetInt32("movie_id")
                     };
                 }
@@ -96,7 +96,7 @@ namespace MovieProject.Services
                 using var conn = new MySqlConnection(_connectionString);
                 conn.Open();
 
-                string query = "UPDATE wishlist SET user_name = @userName, movie_id = @movieId WHERE wishlist_id = @id";
+                string query = "UPDATE wishlist SET movie_name = @userName, movie_id = @movieId WHERE wishlist_id = @id";
                 using var cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@userName", wishlist.UserName);
                 cmd.Parameters.AddWithValue("@movieId", wishlist.MovieId);
